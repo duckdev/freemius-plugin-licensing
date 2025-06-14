@@ -1,2 +1,2 @@
 # Plugin Licensing
-Premium plugin licensing module for Duck Dev plugins
+A premium licensing module developed exclusively for Duck Dev plugins.
