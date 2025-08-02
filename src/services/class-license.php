@@ -42,24 +42,6 @@ class License extends Service {
 	}
 
 	/**
-	 * Get currently active plan name.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_plan_name(): string {
-		if ( $this->is_activated() ) {
-			$activation = $this->get_activation_data();
-			if ( ! empty( $activation['install_data']['license_plan_name'] ) ) {
-				return $activation['install_data']['license_plan_name'];
-			}
-		}
-
-		return '';
-	}
-
-	/**
 	 * Activates the license key for the site.
 	 *
 	 * This also saves a unique ID based on the site URL to the database.
@@ -164,49 +146,6 @@ class License extends Service {
 	}
 
 	/**
-	 * Sync install with remote.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array|WP_Error
-	 */
-	public function sync_install() {
-		if ( $this->is_activated() ) {
-			$activation = $this->get_activation_data();
-			if ( empty( $activation['activation_params']['license_key'] ) ) {
-				return new WP_Error( 'empty_license', __( 'Invalid or empty license key.', 'duckdev-freemius' ) );
-			}
-
-			// Deactivate the license.
-			$deactivate = $this->deactivate();
-			if ( is_wp_error( $deactivate ) ) {
-				return $deactivate;
-			}
-
-			// Attempt to re-activate the license.
-			return $this->activate( $activation['activation_params']['license_key'] );
-		}
-
-		return new WP_Error( 'not_active', __( 'License not active.', 'duckdev-freemius' ) );
-	}
-
-	/**
-	 * Check if the current license is for a specific plan.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $plan     Plan name.
-	 * @param bool   $matching Should match.
-	 *
-	 * @return bool
-	 */
-	public function is_plan( string $plan, bool $matching = true ): bool {
-		$is_match = $this->get_plan_name() === $plan;
-
-		return $matching ? $is_match : ! $is_match;
-	}
-
-	/**
 	 * Check if current license can be deactivated.
 	 *
 	 * @since 1.0.0
@@ -215,7 +154,7 @@ class License extends Service {
 	 *
 	 * @return bool
 	 */
-	private function can_deactivate( array $activation ): bool {
+	protected function can_deactivate( array $activation ): bool {
 		// We need activation data.
 		if ( empty( $activation ) ) {
 			return false;
@@ -241,7 +180,7 @@ class License extends Service {
 	 *
 	 * @return string
 	 */
-	private function get_current_site_uid(): string {
+	protected function get_current_site_uid(): string {
 		$blog_id        = get_current_blog_id();
 		$site_url       = get_site_url( $blog_id );
 		$site_url_parts = parse_url( $site_url );

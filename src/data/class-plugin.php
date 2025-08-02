@@ -46,20 +46,29 @@ class Plugin {
 	private string $main_file;
 
 	/**
+	 * Plugin public key.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string
+	 */
+	private string $public_key = '';
+
+	/**
 	 * Plugin class constructor.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int    $id        Plugin ID.
-	 * @param string $slug      Plugin slug.
-	 * @param string $main_file Plugin main file.
+	 * @param int   $id   Plugin ID.
+	 * @param array $args Arguments.
 	 *
 	 * @return void
 	 */
-	public function __construct( int $id, string $slug, string $main_file ) {
-		$this->id        = $id;
-		$this->slug      = $slug;
-		$this->main_file = $main_file;
+	public function __construct( int $id, array $args ) {
+		$this->id         = $id;
+		$this->slug       = $args['slug'] ?? '';
+		$this->main_file  = $args['main_file'] ?? '';
+		$this->public_key = $args['public_key'] ?? '';
 	}
 
 	/**
@@ -93,5 +102,16 @@ class Plugin {
 	 */
 	public function get_main_file(): string {
 		return $this->main_file;
+	}
+
+	/**
+	 * Gets the plugin public key.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_public_key(): string {
+		return $this->public_key;
 	}
 }

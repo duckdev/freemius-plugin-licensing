@@ -14,6 +14,7 @@ namespace DuckDev\Freemius;
 defined( 'WPINC' ) || die;
 
 use DuckDev\Freemius\Data\Plugin;
+use DuckDev\Freemius\Services\Addon;
 use DuckDev\Freemius\Services\License;
 use DuckDev\Freemius\Services\Update;
 
@@ -41,19 +42,27 @@ class Freemius {
 	private Update $update;
 
 	/**
+	 * Addons manager service instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Addon
+	 */
+	private Addon $addon;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int    $id   Plugin ID.
-	 * @param string $slug Plugin slug.
-	 * @param string $file Plugin file.
-	 * @param array  $args Arguments.
+	 * @param int   $id   Plugin ID.
+	 * @param array $args Arguments.
 	 */
-	protected function __construct( int $id, string $slug, string $file, array $args = array() ) {
-		$plugin        = new Plugin( $id, $slug, $file );
+	protected function __construct( int $id, array $args ) {
+		$plugin        = new Plugin( $id, $args );
 		$this->license = new License( $plugin );
 		$this->update  = new Update( $plugin );
+		$this->addon   = new Addon( $plugin );
 	}
 
 	/**
@@ -61,22 +70,31 @@ class Freemius {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int    $id   Plugin ID.
-	 * @param string $slug Plugin slug.
-	 * @param string $file Plugin file.
-	 * @param array  $args Arguments.
+	 * @param int   $id   Plugin ID.
+	 * @param array $args Arguments.
 	 *
 	 * @return Freemius
 	 */
-	public static function get_instance( int $id, string $slug, string $file, array $args = array() ): Freemius {
+	public static function get_instance( int $id, array $args ): Freemius {
 		static $instances = array();
 
 		// Create new instance only if doesn't exist.
 		if ( ! isset( $instances[ $id ] ) || ! $instances[ $id ] instanceof Freemius ) {
-			$instances[ $id ] = new self( $id, $slug, $file, $args );
+			$instances[ $id ] = new self( $id, $args );
 		}
 
 		return $instances[ $id ];
+	}
+
+	/**
+	 * Get the addons manager service instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Addon
+	 */
+	public function addon(): Addon {
+		return $this->addon;
 	}
 
 	/**

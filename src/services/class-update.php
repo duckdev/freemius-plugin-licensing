@@ -42,39 +42,6 @@ class Update extends Service {
 	}
 
 	/**
-	 * Get the latest plugin version from the API.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array|WP_Error
-	 */
-	public function get_latest() {
-		if ( ! $this->is_activated() ) {
-			return new WP_Error( 'not_active', __( 'License not active.', 'duckdev-freemius' ) );
-		}
-
-		$plugin_data = $this->get_plugin_data();
-		$activation  = $this->get_activation_data();
-
-		// Get authenticated API instance.
-		$api = Api::get_auth_instance(
-			$activation['install_id'],
-			$activation['install_data']['install_public_key'],
-			$activation['install_data']['install_secret_key'],
-			'install'
-		);
-
-		// Get the download URL for the latest version.
-		return $api->get(
-			'updates/latest.json',
-			array(
-				'is_premium' => 'true',
-				'newer_than' => '1.0.0',
-			)
-		);
-	}
-
-	/**
 	 * Get update data for the plugin.
 	 *
 	 * @since 1.0.0
@@ -84,14 +51,14 @@ class Update extends Service {
 	public function get_update_data() {
 		// On force-check, delete transient.
 		if ( isset( $_GET['force-check'] ) ) {
-			delete_transient( self::OPTION_KEY . '_update_data' );
+			$this->delete_transient( 'update_data' );
 		}
 
 		// Save update data to transient if required.
-		$update_data = get_transient( self::OPTION_KEY . '_update_data' );
+		$update_data = $this->get_transient( 'update_data' );
 		if ( ! $update_data ) {
-			$update_data = $this->get_latest();
-			set_transient( self::OPTION_KEY . '_update_data', $update_data, DAY_IN_SECONDS );
+			$update_data = $this->get_remote_latest();
+			$this->set_transient( 'update_data', $update_data, DAY_IN_SECONDS );
 		}
 
 		return $update_data;
@@ -110,7 +77,7 @@ class Update extends Service {
 	public function purge_plugin( $upgrader, array $options ) {
 		if ( 'update' === $options['action'] && 'plugin' === $options['type'] ) {
 			// Clean the cache when new plugin version is installed.
-			delete_transient( self::OPTION_KEY . '_update_data' );
+			$this->delete_transient( 'update_data' );
 		}
 	}
 
@@ -206,5 +173,37 @@ class Update extends Service {
 		}
 
 		return $transient;
+	}
+
+	/**
+	 * Get the latest plugin version from the API.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array|WP_Error
+	 */
+	protected function get_remote_latest() {
+		if ( ! $this->is_activated() ) {
+			return new WP_Error( 'not_active', __( 'License not active.', 'duckdev-freemius' ) );
+		}
+
+		$activation = $this->get_activation_data();
+
+		// Get authenticated API instance.
+		$api = Api::get_auth_instance(
+			$activation['install_id'],
+			$activation['install_data']['install_public_key'],
+			$activation['install_data']['install_secret_key'],
+			'install'
+		);
+
+		// Get the download URL for the latest version.
+		return $api->get(
+			'updates/latest.json',
+			array(
+				'is_premium' => 'true',
+				'newer_than' => '1.0.0',
+			)
+		);
 	}
 }

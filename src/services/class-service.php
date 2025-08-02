@@ -107,4 +107,58 @@ class Service {
 
 		return $activation['status'] === self::ACTIVATED;
 	}
+
+	/**
+	 * Get a transient key.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return string
+	 */
+	protected function get_transient_key( string $key ): string {
+		return "duckdev_freemius_{$this->plugin->get_id()}_$key";
+	}
+
+	/**
+	 * Get a transient value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return mixed
+	 */
+	protected function get_transient( string $key ) {
+		return get_site_transient( $this->get_transient_key( $key ) );
+	}
+
+	/**
+	 * Sets a transient value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key        Transient key.
+	 * @param mixed  $value      Transient value.
+	 * @param int    $expiration Expiration.
+	 *
+	 * @return bool
+	 */
+	protected function set_transient( string $key, $value, int $expiration = 0 ): bool {
+		return set_site_transient( $this->get_transient_key( $key ), $value, $expiration );
+	}
+
+	/**
+	 * Delete a transient value.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return bool
+	 */
+	protected function delete_transient( string $key ): bool {
+		return delete_site_transient( $this->get_transient_key( $key ) );
+	}
 }
