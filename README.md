@@ -12,14 +12,16 @@ This is a lite version of the main Freemius SDK, specifically developed for use 
 
 This library should be installed and included in your WordPress plugin using Composer.
 
-`composer require duckdev/freemius-licensing-sdk`
+```console
+composer require duckdev/freemius-licensing-sdk
+```
 
 ## Usage
 
 
 ### Initialization
 
-Initialize the Freemius SDK by calling the static get\_instance() method with your plugin's details.
+Initialize the Freemius SDK by calling the static `DuckDev\Freemius\Freemius::get_instance()` method with your plugin's details.
 
 ```php
 // Assuming Composer's autoload.php has been included.
