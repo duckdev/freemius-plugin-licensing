@@ -1,0 +1,110 @@
+<?php
+/**
+ * Base class to be extended by services.
+ *
+ * @license    http://www.gnu.org/licenses/ GNU General Public License
+ * @author     Joel James <me@joelsays.com>
+ * @since      1.0.0
+ * @package    Freemius
+ * @subpackage Services
+ */
+
+namespace DuckDev\Freemius\Services;
+
+// If this file is called directly, abort.
+defined( 'WPINC' ) || die;
+
+use DuckDev\Freemius\Data\Plugin;
+
+/**
+ * Class Service
+ */
+class Service {
+
+	/**
+	 * Option key for activation details.
+	 *
+	 * @since 1.0.0
+	 */
+	const OPTION_KEY = 'duckdev_freemius_activation_data';
+
+	/**
+	 * Activated status.
+	 *
+	 * @since 1.0.0
+	 */
+	const ACTIVATED = 'activated';
+
+	/**
+	 * Deactivated status.
+	 *
+	 * @since 1.0.0
+	 */
+	const DEACTIVATED = 'deactivated';
+
+	/**
+	 * Plugin data instance.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var Plugin $plugin
+	 */
+	protected Plugin $plugin;
+
+	/**
+	 * Class constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Plugin $plugin Plugin data.
+	 *
+	 * @return void
+	 */
+	public function __construct( Plugin $plugin ) {
+		$this->plugin = $plugin;
+	}
+
+	/**
+	 * Get plugin activation data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function get_activation_data(): array {
+		return get_option( self::OPTION_KEY, array() );
+	}
+
+	/**
+	 * Get plugin data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	protected function get_plugin_data(): array {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
+
+		return get_plugin_data( $this->plugin->get_main_file() );
+	}
+
+	/**
+	 * Check if a license is active on the site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	protected function is_activated(): bool {
+		$activation = $this->get_activation_data();
+
+		// Check for uid, install id & license key.
+		if ( empty( $activation['install_id'] ) || empty( $activation['activation_params']['uid'] ) || empty( $activation['activation_params']['license_key'] ) ) {
+			return false;
+		}
+
+		return $activation['status'] === self::ACTIVATED;
+	}
+}
