@@ -27,12 +27,12 @@ details.
 ```php
 // Assuming Composer's autoload.php has been included.
 $freemius = DuckDev\Freemius\Freemius::get_instance(
-	12345, // Your Freemius product ID.
-	array(
-		'slug' => 'loggedin', // Your plugin's unique Freemius slug.
-		'main_file'  => LOGGEDIN_FILE, // The path to your plugin's main file.
-		'public_key' => 'pk_XXXXXXXXXXXXXXXXX', // Your plugin's public key.
-	)
+    12345, // Your Freemius product ID.
+    array(
+        'slug' => 'loggedin', // Your plugin's unique Freemius slug.
+	    'main_file'  => LOGGEDIN_FILE, // The path to your plugin's main file.
+        'public_key' => 'pk_XXXXXXXXXXXXXXXXX', // Your plugin's public key.
+    )
 );
 ```
 
