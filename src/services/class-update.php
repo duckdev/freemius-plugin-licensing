@@ -50,7 +50,7 @@ class Update extends Service {
 	 */
 	public function get_update_data() {
 		// On force-check, delete transient.
-		if ( isset( $_GET['force-check'] ) ) {
+		if ( isset( $_GET['force-check'] ) && ! $this->is_duplicate_request( 'update_check' ) ) {
 			$this->delete_transient( 'update_data' );
 		}
 
@@ -58,7 +58,11 @@ class Update extends Service {
 		$update_data = $this->get_transient( 'update_data' );
 		if ( ! $update_data ) {
 			$update_data = $this->get_remote_latest();
-			$this->set_transient( 'update_data', $update_data, DAY_IN_SECONDS );
+			// To prevent multiple requests for 5 mins.
+			$this->set_request_time( 'update_check' );
+			if ( ! is_wp_error( $update_data ) ) {
+				$this->set_transient( 'update_data', $update_data, DAY_IN_SECONDS );
+			}
 		}
 
 		return $update_data;

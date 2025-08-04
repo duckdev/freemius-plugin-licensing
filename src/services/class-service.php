@@ -161,4 +161,31 @@ class Service {
 	protected function delete_transient( string $key ): bool {
 		return delete_site_transient( $this->get_transient_key( $key ) );
 	}
+
+	/**
+	 * Checks if a request is too frequent.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return bool
+	 */
+	protected function is_duplicate_request( string $key ): bool {
+		return $this->get_transient( $key ) ?? false;
+	}
+
+	/**
+	 * Sets a flag for request time.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key        Transient key.
+	 * @param int    $expiration Expiration.
+	 *
+	 * @return bool
+	 */
+	protected function set_request_time( string $key, $expiration = MINUTE_IN_SECONDS * 5 ): bool {
+		return $this->set_transient( $key, time(), $expiration );
+	}
 }
