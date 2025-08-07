@@ -25,23 +25,6 @@ use WP_Error;
 class License extends Service {
 
 	/**
-	 * Get the license key for the site.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_license_key(): string {
-		$activation = $this->get_activation_data();
-		// Return if key found.
-		if ( ! empty( $activation['activation_params']['license_key'] ) ) {
-			return $activation['activation_params']['license_key'];
-		}
-
-		return '';
-	}
-
-	/**
 	 * Activates the license key for the site.
 	 *
 	 * This also saves a unique ID based on the site URL to the database.
@@ -57,11 +40,18 @@ class License extends Service {
 	public function activate( string $key ) {
 		// We need a key!.
 		if ( empty( $key ) ) {
-			return new WP_Error( 'empty_activation_key', __( 'Empty activation key.', 'duckdev-freemius' ) );
+			return new WP_Error( 'empty_activation_key', __( 'License key is empty.', 'duckdev-freemius' ) );
 		}
 
-		$plugin_data = $this->get_plugin_data();
-		$args        = array(
+		// Only a premium plugin requires a license.
+		if ( ! $this->plugin->is_premium() ) {
+			return new WP_Error( 'not_premium', __( 'Not a premium plugin.', 'duckdev-freemius' ) );
+		}
+
+		// Get current plugin data.
+		$plugin_data = $this->plugin->get_data();
+		// Prepare activation args.
+		$args = array(
 			'license_key' => $key,
 			'uid'         => $this->get_current_site_uid(),
 			'url'         => get_site_url(),
@@ -77,26 +67,37 @@ class License extends Service {
 		}
 
 		// Remotely activate the license.
-		$api      = Api::get_instance( $this->plugin->get_id() );
-		$response = $api->post( 'activate.json', $args );
+		$response = Api::get_instance( $this->plugin->get_id() )->post( 'activate.json', $args );
 		// Request failed.
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
-		// Save the activation data.
+		// Save the activation data after successful activation.
 		if ( isset( $response['install_id'] ) ) {
 			$activation['activation_params'] = $args;
 			$activation['install_id']        = $response['install_id'];
 			$activation['date']              = ( new DateTime() )->format( 'Y-m-d H:i:s' );
 			$activation['status']            = self::ACTIVATED;
 			$activation['install_data']      = $response;
-			// Update activation data.
-			update_option( self::OPTION_KEY, $activation, 'no' );
 
-			return true;
+			// Update activation data.
+			$success = $this->set_activation_data( $activation );
+
+			/**
+			 * Action hook to trigger after a plugin license is activated.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array $activation Activation data.
+			 * @param bool  $success    Was the update successful.
+			 */
+			do_action( 'duckdev_freemius_license_activated', $activation, $success );
+
+			return $success;
 		}
 
+		// Unknown error, but this shouldn't be happening.
 		return new WP_Error( 'unknown_error', __( 'Unknown error.', 'duckdev-freemius' ) );
 	}
 
@@ -108,40 +109,54 @@ class License extends Service {
 	 * @return bool|array|WP_Error
 	 */
 	public function deactivate() {
+		// Get activation data.
 		$activation = $this->get_activation_data();
 
-		if ( ! $this->can_deactivate( $activation ) ) {
+		// Check if we can deactivate.
+		if ( ! $this->can_deactivate() ) {
 			return new WP_Error( 'invalid_activation_data', __( 'Invalid activation data.', 'duckdev-freemius' ) );
 		}
 
+		// Prepare deactivation args.
 		$args = array(
-			// Required data.
 			'uid'         => $activation['activation_params']['uid'],
 			'install_id'  => $activation['install_id'],
 			'license_key' => $activation['activation_params']['license_key'],
 			'url'         => get_site_url(),
 		);
 
-		// Remotely activate the license.
-		$api      = Api::get_instance( $this->plugin->get_id() );
-		$response = $api->post( 'deactivate.json', $args );
+		// Remotely deactivate the license.
+		$response = Api::get_instance( $this->plugin->get_id() )->post( 'deactivate.json', $args );
 		// Request failed.
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
+		// Save the data.
 		if ( isset( $response['id'] ) ) {
 			$activation['status'] = self::DEACTIVATED;
 			// Remove the license key so it's not visible in the database.
 			if ( ! empty( $activation['activation_params']['license_key'] ) ) {
 				$activation['activation_params']['license_key'] = '';
 			}
-			// Update activation data.
-			update_option( self::OPTION_KEY, $activation, 'no' );
 
-			return true;
+			// Update deactivation data.
+			$success = $this->set_activation_data( $activation );
+
+			/**
+			 * Action hook to trigger after a plugin license is deactivated.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array $activation Activation data.
+			 * @param bool  $success    Was the update successful.
+			 */
+			do_action( 'duckdev_freemius_license_deactivated', $activation, $success );
+
+			return $success;
 		}
 
+		// Unknown error, but this shouldn't be happening.
 		return new WP_Error( 'unknown_error', __( 'Unknown error.', 'duckdev-freemius' ) );
 	}
 
@@ -150,18 +165,22 @@ class License extends Service {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $activation Activation data.
-	 *
 	 * @return bool
 	 */
-	protected function can_deactivate( array $activation ): bool {
+	protected function can_deactivate(): bool {
+		$activation = $this->get_activation_data();
+
 		// We need activation data.
 		if ( empty( $activation ) ) {
 			return false;
 		}
 
 		// Check for uid, install id & license key.
-		if ( empty( $activation['install_id'] ) || empty( $activation['activation_params']['uid'] ) || empty( $activation['activation_params']['license_key'] ) ) {
+		if (
+			empty( $activation['install_id'] ) ||
+			empty( $activation['activation_params']['uid'] ) ||
+			empty( $activation['activation_params']['license_key'] )
+		) {
 			return false;
 		}
 

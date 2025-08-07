@@ -6,6 +6,8 @@
  * @license    http://www.gnu.org/licenses/ GNU General Public License
  * @author     Joel James <me@joelsays.com>
  * @since      1.0.0
+ * @package    Freemius
+ * @subpackage API
  */
 
 namespace DuckDev\Freemius\Api;
@@ -187,7 +189,7 @@ class Api {
 	 * @return mixed|WP_Error
 	 */
 	public function prepare_response( $response ) {
-		// If WP error, return.
+		// If WP error, return as it is.
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -225,7 +227,7 @@ class Api {
 
 		$headers = array();
 
-		// Sign the request for auth.
+		// Sign the request for auth if both pub and secret keys are set.
 		if ( $this->public_key && $this->secret_key ) {
 			$headers = $this->get_signed_headers(
 				$endpoint,
@@ -237,6 +239,7 @@ class Api {
 			);
 		}
 
+		// Perform the request.
 		return $this->perform_http_request( $method, $url, $data, $headers );
 	}
 
@@ -254,6 +257,7 @@ class Api {
 	protected function prepare_url( string $method, string $endpoint, array $data = array() ): string {
 		$url = $this->base_url . $endpoint;
 
+		// For GET request add query params.
 		if ( $method === 'GET' && ! empty( $data ) ) {
 			$url = add_query_arg( $data, $url );
 		}
@@ -297,11 +301,13 @@ class Api {
 	protected function perform_http_request( string $method, string $url, array $data = array(), array $headers = array() ) {
 		$method = strtoupper( $method );
 		$body   = null;
+		// Make sure the content type is JSON.
 		if ( in_array( $method, array( 'POST', 'PUT', 'DELETE' ) ) ) {
 			$headers['Content-type'] = 'application/json';
 			$body                    = json_encode( $data );
 		}
 
+		// Request args.
 		$args = array(
 			'method'           => $method,
 			'connect_timeout'  => 10,
@@ -381,6 +387,7 @@ class Api {
 		$content_type = '';
 		$date         = date( 'r', time() );
 
+		// Make sure the content type is JSON.
 		if ( in_array( $method, array( 'POST', 'PUT' ) ) ) {
 			$content_type = 'application/json';
 		}

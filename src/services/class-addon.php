@@ -1,6 +1,6 @@
 <?php
 /**
- * This class handles addons.
+ * This class handles addons data.
  *
  * @license    http://www.gnu.org/licenses/ GNU General Public License
  * @author     Joel James <me@joelsays.com>
@@ -30,9 +30,15 @@ class Addon extends Service {
 	 * @return array
 	 */
 	public function get_addons(): array {
+		// Only if current plugin has addons.
+		if ( $this->plugin->has_addons() ) {
+			return array();
+		}
+
 		// Get from cache first.
 		$addons = $this->get_transient( 'addons' );
-		if ( ! empty( $addons ) ) {
+		// If found is cache, return it.
+		if ( false !== $addons ) {
 			return $addons;
 		}
 
@@ -56,9 +62,14 @@ class Addon extends Service {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array|string|WP_Error
+	 * @return array|WP_Error
 	 */
 	protected function get_remote_addons() {
+		// Avoid multiple requests.
+		if ( $this->is_duplicate_request( 'addons_check' ) ) {
+			return new WP_Error( 'too_many_requests', __( 'Too many requests. Slow down.', 'duckdev-freemius' ) );
+		}
+
 		// Get authenticated API instance using public key.
 		$api = Api::get_auth_instance(
 			$this->plugin->get_id(),
@@ -67,7 +78,7 @@ class Addon extends Service {
 			'plugin'
 		);
 
-		// Addon list from API.
+		// Addon list from the API.
 		$response = $api->get(
 			'addons.json',
 			array(
@@ -75,6 +86,9 @@ class Addon extends Service {
 				'show_pending' => false, // Get only released addons.
 			)
 		);
+
+		// To prevent multiple requests for 5 mins.
+		$this->set_request_time( 'addons_check' );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;
@@ -84,7 +98,7 @@ class Addon extends Service {
 	}
 
 	/**
-	 * Get the list of addons from the API.
+	 * Format the addon list to add additional data.
 	 *
 	 * @since 1.0.0
 	 *
@@ -96,6 +110,14 @@ class Addon extends Service {
 		// Premium if pricing is visible.
 		$addon['is_premium'] = $addon['is_pricing_visible'] ?? false;
 
-		return $addon;
+		/**
+		 * Filter to modify addon data.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $addon Addon data.
+		 * @param Addon $this  Current class instance.
+		 */
+		return apply_filters( 'duckdev_freemius_format_addon_data', $addon, $this );
 	}
 }

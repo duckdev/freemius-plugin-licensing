@@ -22,7 +22,7 @@ use DuckDev\Freemius\Data\Plugin;
 class Service {
 
 	/**
-	 * Option key for activation details.
+	 * Option key for activation data.
 	 *
 	 * @since 1.0.0
 	 */
@@ -72,44 +72,44 @@ class Service {
 	 * @return array
 	 */
 	public function get_activation_data(): array {
-		return get_option( self::OPTION_KEY, array() );
+		$activation = get_option( self::OPTION_KEY, array() );
+
+		return $activation[ $this->plugin->get_id() ] ?? array();
 	}
 
 	/**
-	 * Get plugin data.
+	 * Set plugin activation data.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array
-	 */
-	protected function get_plugin_data(): array {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-		}
-
-		return get_plugin_data( $this->plugin->get_main_file() );
-	}
-
-	/**
-	 * Check if a license is active on the site.
-	 *
-	 * @since 1.0.0
+	 * @param array $data Data.
 	 *
 	 * @return bool
 	 */
-	protected function is_activated(): bool {
-		$activation = $this->get_activation_data();
+	public function set_activation_data( array $data ): bool {
+		// Get existing activation data.
+		$activation = get_option( self::OPTION_KEY, array() );
+		// Update the plugin's data.
+		$activation[ $this->plugin->get_id() ] = $data;
 
-		// Check for uid, install id & license key.
-		if ( empty( $activation['install_id'] ) || empty( $activation['activation_params']['uid'] ) || empty( $activation['activation_params']['license_key'] ) ) {
-			return false;
-		}
+		return update_option( self::OPTION_KEY, $activation );
+	}
 
-		return $activation['status'] === self::ACTIVATED;
+	/**
+	 * Get current plugin data object.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Plugin
+	 */
+	public function get_plugin(): Plugin {
+		return $this->plugin;
 	}
 
 	/**
 	 * Get a transient key.
+	 *
+	 * Always use this method to generate unique keys for each plugins.
 	 *
 	 * @since 1.0.0
 	 *
@@ -131,7 +131,7 @@ class Service {
 	 * @return mixed
 	 */
 	protected function get_transient( string $key ) {
-		return get_site_transient( $this->get_transient_key( $key ) );
+		return get_transient( $this->get_transient_key( $key ) );
 	}
 
 	/**
@@ -146,7 +146,7 @@ class Service {
 	 * @return bool
 	 */
 	protected function set_transient( string $key, $value, int $expiration = 0 ): bool {
-		return set_site_transient( $this->get_transient_key( $key ), $value, $expiration );
+		return set_transient( $this->get_transient_key( $key ), $value, $expiration );
 	}
 
 	/**
@@ -159,6 +159,36 @@ class Service {
 	 * @return bool
 	 */
 	protected function delete_transient( string $key ): bool {
-		return delete_site_transient( $this->get_transient_key( $key ) );
+		return delete_transient( $this->get_transient_key( $key ) );
+	}
+
+	/**
+	 * Checks if a request is too frequent.
+	 *
+	 * Use this to avoid multiple HTTP requests being fired in a short period.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return bool
+	 */
+	protected function is_duplicate_request( string $key ): bool {
+		return $this->get_transient( $key ) ?? false;
+	}
+
+	/**
+	 * Sets a flag for request time.
+	 *
+	 * This request flag is valid only for 5 mins.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $key Transient key.
+	 *
+	 * @return bool
+	 */
+	protected function set_request_time( string $key ): bool {
+		return $this->set_transient( $key, time(), MINUTE_IN_SECONDS * 5 );
 	}
 }
