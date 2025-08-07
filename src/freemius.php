@@ -2,6 +2,13 @@
 /**
  * The Freemius SDK for Duck Dev plugins.
  *
+ * This library does not perform any permission checks or nonce
+ * verifications. Plugins should do it before processing any forms.
+ *
+ * References:
+ * - https://github.com/Freemius/wp-sdk-lite
+ * - https://github.com/gambitph/freemius-lite-activation
+ *
  * @link    https://duckdev.com/
  * @license http://www.gnu.org/licenses/ GNU General Public License
  * @author  Joel James <me@joelsays.com>
@@ -59,7 +66,9 @@ class Freemius {
 	 * @param array $args Arguments.
 	 */
 	protected function __construct( int $id, array $args ) {
-		$plugin        = new Plugin( $id, $args );
+		// Create a plugin data instance.
+		$plugin = new Plugin( $id, $args );
+		// Create services.
 		$this->license = new License( $plugin );
 		$this->update  = new Update( $plugin );
 		$this->addon   = new Addon( $plugin );

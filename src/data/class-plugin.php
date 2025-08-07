@@ -6,6 +6,8 @@
  * @license    http://www.gnu.org/licenses/ GNU General Public License
  * @author     Joel James <me@joelsays.com>
  * @since      1.0.0
+ * @package    Freemius
+ * @subpackage Data
  */
 
 namespace DuckDev\Freemius\Data;
@@ -55,6 +57,33 @@ class Plugin {
 	private string $public_key = '';
 
 	/**
+	 * Is a premium plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var bool
+	 */
+	private bool $is_premium;
+
+	/**
+	 * Has addons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var bool
+	 */
+	private bool $has_addons;
+
+	/**
+	 * Plugin data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var array
+	 */
+	private array $data = array();
+
+	/**
 	 * Plugin class constructor.
 	 *
 	 * @since 1.0.0
@@ -67,6 +96,8 @@ class Plugin {
 	public function __construct( int $id, array $args ) {
 		$this->id         = $id;
 		$this->slug       = $args['slug'] ?? '';
+		$this->is_premium = $args['is_premium'] ?? false;
+		$this->has_addons = $args['has_addons'] ?? false;
 		$this->main_file  = $args['main_file'] ?? '';
 		$this->public_key = $args['public_key'] ?? '';
 	}
@@ -113,5 +144,46 @@ class Plugin {
 	 */
 	public function get_public_key(): string {
 		return $this->public_key;
+	}
+
+	/**
+	 * Check if current plugin is premium.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_premium(): bool {
+		return $this->is_premium;
+	}
+
+	/**
+	 * Check if current plugin has addons.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function has_addons(): bool {
+		return $this->has_addons;
+	}
+
+	/**
+	 * Get current plugin data.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function get_data(): array {
+		if ( empty( $this->data ) ) {
+			if ( ! function_exists( '\get_plugin_data' ) ) {
+				require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			}
+
+			$this->data = \get_plugin_data( $this->main_file );
+		}
+
+		return $this->data;
 	}
 }
