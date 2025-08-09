@@ -14,7 +14,7 @@ user interface, so your plugin will need to create its own UI and use this libra
 This library should be installed and included in your WordPress plugin using Composer.
 
 ```console
-composer require duckdev/freemius-licensing-sdk
+composer require duckdev/freemius-plugin-licensing
 ```
 
 ## Usage
