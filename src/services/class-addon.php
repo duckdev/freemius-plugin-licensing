@@ -27,19 +27,23 @@ class Addon extends Service {
 	 *
 	 * @since 1.0.0
 	 *
+	 * @param bool $force Should force update cache.
+	 *
 	 * @return array
 	 */
-	public function get_addons(): array {
+	public function get_addons( bool $force = false ): array {
 		// Only if current plugin has addons.
 		if ( $this->plugin->has_addons() ) {
 			return array();
 		}
 
 		// Get from cache first.
-		$addons = $this->get_transient( 'addons' );
-		// If found is cache, return it.
-		if ( false !== $addons ) {
-			return $addons;
+		if ( ! $force ) {
+			$addons = $this->get_transient( 'addons' );
+			// If found is cache, return it.
+			if ( false !== $addons ) {
+				return $addons;
+			}
 		}
 
 		// Get from the API.
