@@ -33,7 +33,7 @@ class Addon extends Service {
 	 */
 	public function get_addons( bool $force = false ): array {
 		// Only if current plugin has addons.
-		if ( $this->plugin->has_addons() ) {
+		if ( ! $this->plugin->has_addons() ) {
 			return array();
 		}
 
