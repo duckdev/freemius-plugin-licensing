@@ -53,7 +53,7 @@ class Addon extends Service {
 			// Format the data.
 			$addons = array_map( array( $this, 'format_addon_data' ), $addons );
 			// Save to cache.
-			$this->set_transient( 'addons', $addons );
+			$this->set_transient( 'addons', $addons, DAY_IN_SECONDS );
 
 			return $addons;
 		}
