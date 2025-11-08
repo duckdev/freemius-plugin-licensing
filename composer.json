@@ -1,6 +1,6 @@
 {
   "name": "duckdev/freemius-plugin-licensing",
-  "version": "1.0.0-beta4",
+  "version": "1.0.0",
   "type": "library",
   "description": "Lite version of the Freemius SDK for managing plugin licensing and updates using Freemius APIs, specifically developed for use with Duck Dev plugins.",
   "keywords": [
