@@ -29,8 +29,8 @@
     }
   },
   "autoload": {
-    "classmap": [
-      "src/"
-    ]
+    "psr-4": {
+      "DuckDev\\Freemius\\": "src/"
+    }
   }
 }
