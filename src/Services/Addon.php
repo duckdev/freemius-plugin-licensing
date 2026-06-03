@@ -82,12 +82,14 @@ class Addon extends AbstractService {
 	 * Get the list of addons for the host plugin.
 	 *
 	 * Returns an empty array (rather than a WP_Error) when:
-	 * - the host plugin does not declare `has_addons`,
-	 * - the API request fails, or
-	 * - the throttle window is still open.
+	 * - the host plugin does not declare `has_addons`, or
+	 * - the API request fails with no cached catalog to fall back on.
 	 *
 	 * Use `$force = true` to bypass the cache when the user explicitly
-	 * asks for a refresh from the host plugin's UI.
+	 * asks for a refresh from the host plugin's UI. A forced call that
+	 * the throttle blocks (or that the API rejects) transparently falls
+	 * back to the cached catalog — the host UI keeps showing the
+	 * last-known list instead of emptying out.
 	 *
 	 * @since 2.0.0
 	 *
@@ -100,16 +102,16 @@ class Addon extends AbstractService {
 			return array();
 		}
 
-		if ( ! $force ) {
-			$cached = $this->cache->get( 'addons' );
-			if ( false !== $cached && is_array( $cached ) ) {
-				return $cached;
-			}
+		$cached = $this->cache->get( 'addons' );
+		$cached = ( false !== $cached && is_array( $cached ) ) ? $cached : array();
+
+		if ( ! $force && ! empty( $cached ) ) {
+			return $cached;
 		}
 
 		$addons = $this->get_remote_addons();
 		if ( is_wp_error( $addons ) ) {
-			return array();
+			return $cached;
 		}
 
 		$addons = array_map( array( $this, 'format_addon_data' ), $addons );

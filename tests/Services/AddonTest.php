@@ -46,7 +46,10 @@ final class AddonTest extends TestCase {
 	public function test_force_bypasses_cache_and_persists_formatted_result(): void {
 		$cache = $this->createMock( CacheInterface::class );
 		$cache->method( 'is_throttled' )->willReturn( false );
-		$cache->expects( $this->never() )->method( 'get' );
+		// `get` is consulted even on a forced refresh so the cached
+		// catalog can serve as a fallback when the API call fails or
+		// the throttle kicks in. Returning `false` mimics "no cache".
+		$cache->method( 'get' )->willReturn( false );
 		$cache->expects( $this->once() )
 			->method( 'set' )
 			->with(
@@ -84,7 +87,7 @@ final class AddonTest extends TestCase {
 		$this->assertTrue( $result[0]['is_premium'] );
 	}
 
-	public function test_returns_empty_array_on_api_error(): void {
+	public function test_returns_empty_when_api_errors_and_no_cache(): void {
 		$cache = $this->createMock( CacheInterface::class );
 		$cache->method( 'get' )->willReturn( false );
 		$cache->method( 'is_throttled' )->willReturn( false );
@@ -98,7 +101,32 @@ final class AddonTest extends TestCase {
 		$this->assertSame( array(), ( new Addon( $this->plugin(), $cache, $factory ) )->get_addons() );
 	}
 
-	public function test_throttled_request_returns_empty_array_and_does_not_call_api(): void {
+	public function test_force_falls_back_to_cache_when_api_errors(): void {
+		$cached = array(
+			array(
+				'id'    => 42,
+				'title' => 'Cached',
+			),
+		);
+
+		$cache = $this->createMock( CacheInterface::class );
+		$cache->method( 'get' )->willReturn( $cached );
+		$cache->method( 'is_throttled' )->willReturn( false );
+		// API failed → catalog must not be overwritten.
+		$cache->expects( $this->never() )->method( 'set' );
+
+		$api = $this->createMock( ApiClientInterface::class );
+		$api->method( 'get' )->willReturn( new WP_Error( 'fail', 'no' ) );
+
+		$factory = $this->createMock( ApiFactory::class );
+		$factory->method( 'make_for_plugin' )->willReturn( $api );
+
+		$result = ( new Addon( $this->plugin(), $cache, $factory ) )->get_addons( true );
+
+		$this->assertSame( $cached, $result );
+	}
+
+	public function test_throttled_request_returns_empty_when_no_cache(): void {
 		$cache = $this->createMock( CacheInterface::class );
 		$cache->method( 'get' )->willReturn( false );
 		$cache->method( 'is_throttled' )->with( 'addons_check' )->willReturn( true );
@@ -110,6 +138,31 @@ final class AddonTest extends TestCase {
 		$factory->method( 'make_for_plugin' )->willReturn( $api );
 
 		$this->assertSame( array(), ( new Addon( $this->plugin(), $cache, $factory ) )->get_addons() );
+	}
+
+	public function test_force_falls_back_to_cache_when_throttled(): void {
+		$cached = array(
+			array(
+				'id'    => 9,
+				'title' => 'Stale but fine',
+			),
+		);
+
+		$cache = $this->createMock( CacheInterface::class );
+		$cache->method( 'get' )->willReturn( $cached );
+		$cache->method( 'is_throttled' )->with( 'addons_check' )->willReturn( true );
+		// Throttle blocked the API call → catalog stays as it is.
+		$cache->expects( $this->never() )->method( 'set' );
+
+		$api = $this->createMock( ApiClientInterface::class );
+		$api->expects( $this->never() )->method( 'get' );
+
+		$factory = $this->createMock( ApiFactory::class );
+		$factory->method( 'make_for_plugin' )->willReturn( $api );
+
+		$result = ( new Addon( $this->plugin(), $cache, $factory ) )->get_addons( true );
+
+		$this->assertSame( $cached, $result );
 	}
 
 	public function test_mark_requested_called_after_request(): void {
