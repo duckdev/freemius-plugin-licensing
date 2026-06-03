@@ -1,6 +1,10 @@
 .DS_Store
 node_modules
 vendor
+.phpunit.result.cache
+.phpcs-cache
+phpcs.xml
+phpunit.xml
 
 
 # local env files
