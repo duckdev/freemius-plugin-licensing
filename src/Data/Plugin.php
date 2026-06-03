@@ -38,7 +38,7 @@ class Plugin {
 	/**
 	 * Freemius product ID.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var int
 	 */
@@ -47,7 +47,7 @@ class Plugin {
 	/**
 	 * Freemius product slug.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -59,7 +59,7 @@ class Plugin {
 	 * Required by WordPress to look up plugin headers and compute
 	 * `plugin_basename()`.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -68,7 +68,7 @@ class Plugin {
 	/**
 	 * Freemius public key (`pk_…`).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -80,7 +80,7 @@ class Plugin {
 	 * Used by services to decide whether to register update hooks or
 	 * accept license activation requests.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var bool
 	 */
@@ -89,7 +89,7 @@ class Plugin {
 	/**
 	 * Whether the plugin has addons to list.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var bool
 	 */
@@ -100,7 +100,7 @@ class Plugin {
 	 *
 	 * Populated lazily on first call to {@see get_data()}.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var array
 	 */
@@ -109,7 +109,7 @@ class Plugin {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int   $id   Freemius product ID.
 	 * @param array $args Plugin args (see class docblock for the schema).
@@ -126,7 +126,7 @@ class Plugin {
 	/**
 	 * Get the Freemius product ID.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return int
 	 */
@@ -137,7 +137,7 @@ class Plugin {
 	/**
 	 * Get the Freemius product slug.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -148,7 +148,7 @@ class Plugin {
 	/**
 	 * Get the absolute path to the plugin's main file.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -159,7 +159,7 @@ class Plugin {
 	/**
 	 * Get the Freemius public key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -170,7 +170,7 @@ class Plugin {
 	/**
 	 * Whether the host plugin is the premium build.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -181,7 +181,7 @@ class Plugin {
 	/**
 	 * Whether the host plugin has addons to list.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -196,7 +196,7 @@ class Plugin {
 	 * helper from `wp-admin/includes/plugin.php` is loaded on demand
 	 * because it isn't available on front-end requests by default.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array Plugin headers as returned by `get_plugin_data()`.
 	 */

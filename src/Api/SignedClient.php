@@ -34,7 +34,7 @@ class SignedClient extends Client {
 	/**
 	 * Key pair used to sign each request.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ApiKeys
 	 */
@@ -43,7 +43,7 @@ class SignedClient extends Client {
 	/**
 	 * Collaborator that produces the auth headers.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var RequestSigner
 	 */
@@ -52,7 +52,7 @@ class SignedClient extends Client {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string        $id     Entity ID.
 	 * @param ApiKeys       $keys   Key pair to sign with.
@@ -75,7 +75,7 @@ class SignedClient extends Client {
 	 * caller will receive whatever the Freemius API returns in that
 	 * case (typically an authentication error).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $method   HTTP method.
 	 * @param string $endpoint Prepared endpoint path.

@@ -36,7 +36,7 @@ class SiteIdentity {
 	 * subsites get distinct UIDs and subdirectory installs do not
 	 * collide with the root site.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string 32-character hexadecimal UID.
 	 */

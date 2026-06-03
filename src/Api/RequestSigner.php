@@ -42,7 +42,7 @@ class RequestSigner {
 	/**
 	 * Build the signed header set for an outgoing request.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string  $resource_url Prepared endpoint path (the value `prepare_endpoint()` produced).
 	 * @param string  $method       HTTP method (any case).

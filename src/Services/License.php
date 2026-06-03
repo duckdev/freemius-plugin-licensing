@@ -41,7 +41,7 @@ class License extends AbstractService {
 	/**
 	 * Repository used to read and persist the activation.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ActivationRepository
 	 */
@@ -50,7 +50,7 @@ class License extends AbstractService {
 	/**
 	 * Factory used to obtain API clients.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ApiFactory
 	 */
@@ -59,7 +59,7 @@ class License extends AbstractService {
 	/**
 	 * Helper used to compute the current site's UID.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var SiteIdentity
 	 */
@@ -68,7 +68,7 @@ class License extends AbstractService {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin               $plugin      Plugin instance.
 	 * @param ActivationRepository $activations Activation repository.
@@ -94,7 +94,7 @@ class License extends AbstractService {
 	 * Always returns an {@see Activation} — empty when nothing is
 	 * stored yet.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return Activation
 	 */
@@ -109,7 +109,7 @@ class License extends AbstractService {
 	 * key. On a successful response the install ID is persisted so
 	 * subsequent activate calls reuse the same install.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key License key supplied by the user.
 	 *
@@ -167,7 +167,7 @@ class License extends AbstractService {
 			/**
 			 * Fires after a plugin license is activated.
 			 *
-			 * @since 1.0.0
+			 * @since 2.0.0
 			 *
 			 * @param array $activation Activation data array.
 			 * @param bool  $success    Whether the option update succeeded.
@@ -189,7 +189,7 @@ class License extends AbstractService {
 	 * in which case the new site is treated as not licensed rather
 	 * than silently freeing the seat at the original host.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool|\WP_Error
 	 */
@@ -224,7 +224,7 @@ class License extends AbstractService {
 			/**
 			 * Fires after a plugin license is deactivated.
 			 *
-			 * @since 1.0.0
+			 * @since 2.0.0
 			 *
 			 * @param array $activation Activation data array.
 			 * @param bool  $success    Whether the option update succeeded.
@@ -245,7 +245,7 @@ class License extends AbstractService {
 	 * 2. The identifying fields (install ID, UID, license key) are present.
 	 * 3. The stored UID matches the current site UID.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Activation $activation Activation to check.
 	 *

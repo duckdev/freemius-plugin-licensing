@@ -44,7 +44,7 @@ class ApiFactory {
 	/**
 	 * Signer reused across every signed client this factory produces.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var RequestSigner
 	 */
@@ -53,7 +53,7 @@ class ApiFactory {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param RequestSigner|null $signer Signer to use. A default instance is
 	 *                                   constructed when null is supplied.
@@ -69,7 +69,7 @@ class ApiFactory {
 	 * activate.json / deactivate.json endpoints which accept a
 	 * license key in the body and do not require signing.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $id    Entity ID.
 	 * @param string $scope API scope.
@@ -83,7 +83,7 @@ class ApiFactory {
 	/**
 	 * Build a signed client from an explicit key pair.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string  $id    Entity ID.
 	 * @param ApiKeys $keys  Key pair.
@@ -104,7 +104,7 @@ class ApiFactory {
 	 * Freemius expects when only the plugin public key is known to
 	 * the host (info.json, addons.json).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin $plugin Plugin instance.
 	 *
@@ -124,7 +124,7 @@ class ApiFactory {
 	 * Build an install-scoped client signed with the credentials
 	 * returned by the API at activation time.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string  $install_id Install ID returned by the activation response.
 	 * @param ApiKeys $keys       Install key pair (from {@see \DuckDev\Freemius\Data\Activation::api_keys()}).

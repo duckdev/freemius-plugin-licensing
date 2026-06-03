@@ -36,7 +36,7 @@ abstract class AbstractService implements ServiceInterface {
 	/**
 	 * Plugin the service is operating on behalf of.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var Plugin
 	 */
@@ -45,7 +45,7 @@ abstract class AbstractService implements ServiceInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin $plugin Plugin instance.
 	 */
@@ -56,7 +56,7 @@ abstract class AbstractService implements ServiceInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function get_plugin(): Plugin {
 		return $this->plugin;
@@ -68,7 +68,7 @@ abstract class AbstractService implements ServiceInterface {
 	 * Default implementation registers no hooks. Override in subclasses
 	 * to attach to WordPress filters/actions during boot.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function boot(): void {
 		// No-op by default.

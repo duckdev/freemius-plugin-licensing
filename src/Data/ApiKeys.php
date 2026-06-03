@@ -39,7 +39,7 @@ class ApiKeys {
 	/**
 	 * Public key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -48,7 +48,7 @@ class ApiKeys {
 	/**
 	 * Secret key. Defaults to the public key when omitted (FSP mode).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -61,7 +61,7 @@ class ApiKeys {
 	 * secret key copies the public key into the secret slot, which is
 	 * how the signer recognises FSP mode.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $public_key Public key.
 	 * @param string $secret_key Secret key. Optional.
@@ -74,7 +74,7 @@ class ApiKeys {
 	/**
 	 * Get the public key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -85,7 +85,7 @@ class ApiKeys {
 	/**
 	 * Get the secret key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -96,7 +96,7 @@ class ApiKeys {
 	/**
 	 * Whether the pair has enough information to sign a request.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */

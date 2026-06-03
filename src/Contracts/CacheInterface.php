@@ -38,7 +38,7 @@ interface CacheInterface {
 	 * or expired so callers can rely on a strict `false === $value`
 	 * comparison to detect a miss.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key Cache key (unprefixed — the implementation prefixes it).
 	 *
@@ -49,7 +49,7 @@ interface CacheInterface {
 	/**
 	 * Persist a value in the cache.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key        Cache key (unprefixed).
 	 * @param mixed  $value      Value to cache. Must be serializable.
@@ -62,7 +62,7 @@ interface CacheInterface {
 	/**
 	 * Delete a cached value.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key Cache key (unprefixed).
 	 *
@@ -77,7 +77,7 @@ interface CacheInterface {
 	 * made recently. Always returns false until the matching
 	 * {@see mark_requested()} call has been made.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key Throttle key.
 	 *
@@ -91,7 +91,7 @@ interface CacheInterface {
 	 * After this call, {@see is_throttled()} returns true for the same
 	 * key until the implementation's throttle window expires.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key Throttle key.
 	 *

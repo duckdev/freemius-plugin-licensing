@@ -160,7 +160,7 @@ class Freemius {
 	 * automatically by {@see get_instance()}; exposed publicly only
 	 * so unusual host integrations can defer hook registration.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return void
 	 */
@@ -179,7 +179,7 @@ class Freemius {
 	/**
 	 * Get the plugin data instance.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return Plugin
 	 */

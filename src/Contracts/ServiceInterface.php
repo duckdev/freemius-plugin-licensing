@@ -42,7 +42,7 @@ interface ServiceInterface {
 	 * the host plugin (slug, ID, premium flag, etc.) without going back
 	 * through the container.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return Plugin
 	 */
@@ -56,7 +56,7 @@ interface ServiceInterface {
 	 * return when there is nothing to register (for example when the
 	 * host plugin is the free build).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return void
 	 */

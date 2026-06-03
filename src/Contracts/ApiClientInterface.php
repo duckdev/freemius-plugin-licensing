@@ -32,7 +32,7 @@ interface ApiClientInterface {
 	/**
 	 * Perform a GET request against a scoped endpoint.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $endpoint Endpoint relative to the entity scope (e.g. "info.json").
 	 * @param array  $params   Query string parameters.
@@ -44,7 +44,7 @@ interface ApiClientInterface {
 	/**
 	 * Perform a POST request against a scoped endpoint.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $endpoint Endpoint relative to the entity scope.
 	 * @param array  $data     Body data — JSON-encoded by the client.
@@ -56,7 +56,7 @@ interface ApiClientInterface {
 	/**
 	 * Perform a PUT request against a scoped endpoint.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $endpoint Endpoint relative to the entity scope.
 	 * @param array  $data     Body data — JSON-encoded by the client.
@@ -68,7 +68,7 @@ interface ApiClientInterface {
 	/**
 	 * Perform a DELETE request against a scoped endpoint.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $endpoint Endpoint relative to the entity scope.
 	 * @param array  $data     Body data — JSON-encoded by the client.

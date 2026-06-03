@@ -36,7 +36,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Base URL for the Freemius API.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -45,7 +45,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Entity ID injected into the scoped URL path.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -56,7 +56,7 @@ class Client implements ApiClientInterface {
 	 *
 	 * Mapped to the URL segment `/{scope}s/{id}/`.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var string
 	 */
@@ -65,7 +65,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $id    Entity ID.
 	 * @param string $scope API scope. Defaults to `plugin`.
@@ -78,7 +78,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function get( string $endpoint, array $params = array() ) {
 		return $this->prepare_request( 'GET', $endpoint, $params );
@@ -87,7 +87,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function post( string $endpoint, array $data = array() ) {
 		return $this->prepare_request( 'POST', $endpoint, $data );
@@ -96,7 +96,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function put( string $endpoint, array $data = array() ) {
 		return $this->prepare_request( 'PUT', $endpoint, $data );
@@ -105,7 +105,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function delete( string $endpoint, array $data = array() ) {
 		return $this->prepare_request( 'DELETE', $endpoint, $data );
@@ -120,7 +120,7 @@ class Client implements ApiClientInterface {
 	 * 2. The JSON-decoded body when it carries an `error.code` /
 	 *    `error.message` pair — the standard Freemius shape.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param array|\WP_Error $response Raw response from `wp_remote_request()`.
 	 *
@@ -147,7 +147,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Prepare URL/headers and dispatch a request.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $method   HTTP method.
 	 * @param string $endpoint Caller-supplied endpoint (relative to the entity scope).
@@ -169,7 +169,7 @@ class Client implements ApiClientInterface {
 	 * Returns an empty array for the unsigned client. Subclasses override
 	 * to add `Authorization`, `Date`, and `Content-MD5` headers.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $method   HTTP method.
 	 * @param string $endpoint Prepared endpoint path (after `prepare_endpoint()`).
@@ -190,7 +190,7 @@ class Client implements ApiClientInterface {
 	 * other verbs leave the URL alone and serialise the body to JSON
 	 * inside {@see perform_http_request()}.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $method   HTTP method.
 	 * @param string $endpoint Prepared endpoint path.
@@ -211,7 +211,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Build the scoped endpoint path: `/v1/{scope}s/{id}/{endpoint}`.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $endpoint Caller-supplied endpoint (with or without leading slash).
 	 *
@@ -232,7 +232,7 @@ class Client implements ApiClientInterface {
 	/**
 	 * Dispatch the HTTP request via `wp_remote_request()`.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $method  HTTP method (already uppercased upstream is fine).
 	 * @param string $url     Full URL.
@@ -266,7 +266,7 @@ class Client implements ApiClientInterface {
 		/**
 		 * Filter the arguments used in the API request.
 		 *
-		 * @since 1.0.0
+		 * @since 2.0.0
 		 *
 		 * @param array  $args    Request arguments.
 		 * @param string $method  HTTP method.
@@ -287,7 +287,7 @@ class Client implements ApiClientInterface {
 	 * Filterable via `duckdev_freemius_api_request_verify_ssl` for the
 	 * rare case where a local dev environment needs to disable it.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -295,7 +295,7 @@ class Client implements ApiClientInterface {
 		/**
 		 * Filter to change if the API SSL should be verified.
 		 *
-		 * @since 1.0.0
+		 * @since 2.0.0
 		 *
 		 * @param bool   $verify Should verify?
 		 * @param Client $client Current client instance.

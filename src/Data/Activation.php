@@ -56,21 +56,21 @@ class Activation {
 	/**
 	 * Active status string persisted in the activation array.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	const STATUS_ACTIVATED = 'activated';
 
 	/**
 	 * Inactive status string persisted in the activation array.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	const STATUS_DEACTIVATED = 'deactivated';
 
 	/**
 	 * Underlying activation array.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var array
 	 */
@@ -82,7 +82,7 @@ class Activation {
 	 * Accepts an empty array to represent "no activation yet" — see
 	 * {@see is_empty()} for the inverse check.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param array $data Raw activation array.
 	 */
@@ -93,7 +93,7 @@ class Activation {
 	/**
 	 * Named constructor for clarity at call sites.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param array $data Raw activation array.
 	 *
@@ -106,7 +106,7 @@ class Activation {
 	/**
 	 * Return the underlying array. Used by the repository for persistence.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -117,7 +117,7 @@ class Activation {
 	/**
 	 * Install ID returned by the Freemius API at activation time.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string Empty string when no install has been created.
 	 */
@@ -131,7 +131,7 @@ class Activation {
 	 * Note: the key is blanked from storage on deactivation, see
 	 * {@see with_scrubbed_license()}.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -142,7 +142,7 @@ class Activation {
 	/**
 	 * Deterministic UID of the site this activation belongs to.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -153,7 +153,7 @@ class Activation {
 	/**
 	 * Activation status, one of {@see STATUS_ACTIVATED} or {@see STATUS_DEACTIVATED}.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -164,7 +164,7 @@ class Activation {
 	/**
 	 * Activation timestamp (formatted as `Y-m-d H:i:s`).
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -175,7 +175,7 @@ class Activation {
 	/**
 	 * Raw activation parameters originally sent to the API.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -186,7 +186,7 @@ class Activation {
 	/**
 	 * Raw install data as returned by the Freemius API.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -200,7 +200,7 @@ class Activation {
 	 * Returns an empty pair if the install data is incomplete — call
 	 * {@see ApiKeys::is_signable()} on the result to check.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return ApiKeys
 	 */
@@ -217,7 +217,7 @@ class Activation {
 	 * Whether the activation has the identifying fields needed to
 	 * deactivate or to authenticate install-scoped API calls.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -233,7 +233,7 @@ class Activation {
 	 * Requires the identifying fields to be present and the status to
 	 * be {@see STATUS_ACTIVATED}.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -245,7 +245,7 @@ class Activation {
 	/**
 	 * Whether nothing has been stored for the plugin yet.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */
@@ -256,7 +256,7 @@ class Activation {
 	/**
 	 * Return a new instance with the supplied top-level keys overridden.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param array $changes Associative array of changes.
 	 *
@@ -273,7 +273,7 @@ class Activation {
 	 * options table while still preserving the rest of the
 	 * activation context for diagnostics.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return self
 	 */

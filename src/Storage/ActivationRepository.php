@@ -36,7 +36,7 @@ class ActivationRepository {
 	/**
 	 * Option key that stores activations for all Duck Dev plugins.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	const OPTION_KEY = 'duckdev_freemius_activation_data';
 
@@ -47,7 +47,7 @@ class ActivationRepository {
 	 * {@see Activation::is_empty()} to detect the no-activation case
 	 * rather than null-checking the result.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $plugin_id Freemius plugin ID.
 	 *
@@ -62,7 +62,7 @@ class ActivationRepository {
 	/**
 	 * Persist an activation for a plugin.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int        $plugin_id  Freemius plugin ID.
 	 * @param Activation $activation Activation to persist.
@@ -79,7 +79,7 @@ class ActivationRepository {
 	/**
 	 * Remove the activation for a plugin entirely.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param int $plugin_id Freemius plugin ID.
 	 *

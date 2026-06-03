@@ -45,7 +45,7 @@ class Update extends AbstractService {
 	/**
 	 * Repository used to read the current activation.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ActivationRepository
 	 */
@@ -54,7 +54,7 @@ class Update extends AbstractService {
 	/**
 	 * Cache used to throttle and memoise API calls.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var CacheInterface
 	 */
@@ -63,7 +63,7 @@ class Update extends AbstractService {
 	/**
 	 * Factory used to obtain API clients.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ApiFactory
 	 */
@@ -72,7 +72,7 @@ class Update extends AbstractService {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin               $plugin      Plugin instance.
 	 * @param ActivationRepository $activations Activation repository.
@@ -98,7 +98,7 @@ class Update extends AbstractService {
 	 * Only attaches when the host plugin is the premium build — the
 	 * free build does not consume the Freemius update API.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return void
 	 */
@@ -119,7 +119,7 @@ class Update extends AbstractService {
 	 * `?force-check=1`, the WordPress convention) to bypass the cache
 	 * and re-fetch.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param bool $force Whether to bypass the cache.
 	 *
@@ -141,7 +141,10 @@ class Update extends AbstractService {
 		if ( false === $update_data ) {
 			$update_data = $this->get_remote_latest();
 			if ( is_wp_error( $update_data ) ) {
-				$update_data = array();
+				// Don't cache failures — a transient error (throttle, network blip,
+				// license-not-yet-active) would otherwise suppress updates for a
+				// full day. Callers already handle WP_Error as "no update".
+				return $update_data;
 			}
 
 			$this->cache->set( 'update_data', $update_data, DAY_IN_SECONDS );
@@ -155,7 +158,7 @@ class Update extends AbstractService {
 	 *
 	 * Cached for a day on success.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -178,7 +181,7 @@ class Update extends AbstractService {
 	 * Bound to `upgrader_process_complete`. The check ensures we only
 	 * purge when the upgrader actually touched THIS plugin.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param mixed $upgrader   Plugin upgrader. Unused.
 	 * @param array $hook_extra Hook context from WordPress.
@@ -211,7 +214,7 @@ class Update extends AbstractService {
 	 * Plugins screen. Returns the original `$data` argument untouched
 	 * when the request is not for this plugin.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param false|object|array $data   Existing payload from upstream filters.
 	 * @param string             $action The current `plugins_api` action.
@@ -278,7 +281,7 @@ class Update extends AbstractService {
 	 * Injects our plugin's update info into the standard WP transient
 	 * so the core Plugins screen offers the upgrade.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param mixed $transient Existing transient value.
 	 *
@@ -307,7 +310,7 @@ class Update extends AbstractService {
 			)
 			&& version_compare( $plugin_data['Version'] ?? '0', $update_data['version'], '<' )
 			&& version_compare( $update_data['requires_platform_version'], get_bloginfo( 'version' ), '<=' )
-			&& version_compare( $update_data['requires_programming_language_version'], PHP_VERSION, '<' )
+			&& version_compare( $update_data['requires_programming_language_version'], PHP_VERSION, '<=' )
 		) {
 			$res              = new stdClass();
 			$res->slug        = $this->plugin->get_slug();
@@ -330,7 +333,7 @@ class Update extends AbstractService {
 	 * otherwise so the caller can cache an empty result and avoid
 	 * re-hitting the API on every page load.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -363,7 +366,7 @@ class Update extends AbstractService {
 	/**
 	 * Fetch the product info payload from the Freemius API.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array|\WP_Error
 	 */
@@ -376,7 +379,7 @@ class Update extends AbstractService {
 	/**
 	 * Whether the host plugin currently has an active license.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return bool
 	 */

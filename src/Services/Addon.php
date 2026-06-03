@@ -40,14 +40,14 @@ class Addon extends AbstractService {
 	 * constant so it is easy to find when Freemius changes the
 	 * checkout domain or path.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	const CHECKOUT_URL = 'https://checkout.freemius.com/plugin/';
 
 	/**
 	 * Cache used to memoise the addon list and throttle API calls.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var CacheInterface
 	 */
@@ -56,7 +56,7 @@ class Addon extends AbstractService {
 	/**
 	 * Factory used to obtain API clients.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var ApiFactory
 	 */
@@ -65,7 +65,7 @@ class Addon extends AbstractService {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin         $plugin      Plugin instance.
 	 * @param CacheInterface $cache       Cache.
@@ -89,7 +89,7 @@ class Addon extends AbstractService {
 	 * Use `$force = true` to bypass the cache when the user explicitly
 	 * asks for a refresh from the host plugin's UI.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param bool $force Whether to bypass the cache.
 	 *
@@ -124,7 +124,7 @@ class Addon extends AbstractService {
 	 * Uses the plugin-scoped signed client (FSP encoding) since this
 	 * endpoint is reachable with only the public key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array|\WP_Error List of addons or WP_Error on failure / throttle.
 	 */
@@ -158,7 +158,7 @@ class Addon extends AbstractService {
 	 * - `link`       — Freemius checkout URL for the addon.
 	 * - `is_premium` — boolean mirror of `is_pricing_visible`.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param array $addon Raw addon entry from the API.
 	 *
@@ -171,7 +171,7 @@ class Addon extends AbstractService {
 		/**
 		 * Filter the formatted addon data before it is returned / cached.
 		 *
-		 * @since 1.0.0
+		 * @since 2.0.0
 		 *
 		 * @param array $addon Addon data.
 		 * @param Addon $self  Current service instance.

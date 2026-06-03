@@ -34,7 +34,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * Plugin instance the cache is scoped to.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var Plugin
 	 */
@@ -43,7 +43,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * Throttle window length in seconds.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @var int
 	 */
@@ -52,7 +52,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param Plugin $plugin          Plugin instance the cache is scoped to.
 	 * @param int    $throttle_window Throttle window in seconds. Defaults to
@@ -66,7 +66,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * Build a plugin-scoped transient key from a caller-supplied key.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @param string $key Caller key (un-prefixed).
 	 *
@@ -79,7 +79,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function get( string $key ) {
 		return get_transient( $this->build_key( $key ) );
@@ -88,7 +88,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function set( string $key, $value, int $expiration = 0 ): bool {
 		return (bool) set_transient( $this->build_key( $key ), $value, $expiration );
@@ -97,7 +97,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function delete( string $key ): bool {
 		return (bool) delete_transient( $this->build_key( $key ) );
@@ -106,7 +106,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function is_throttled( string $key ): bool {
 		return false !== $this->get( $key );
@@ -115,7 +115,7 @@ class TransientCache implements CacheInterface {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 */
 	public function mark_requested( string $key ): bool {
 		return $this->set( $key, time(), $this->throttle_window );
