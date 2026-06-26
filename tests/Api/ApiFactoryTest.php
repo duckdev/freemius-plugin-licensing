@@ -45,6 +45,9 @@ final class ApiFactoryTest extends TestCase {
 		// Reflect into the internal keys to confirm both slots use the public key (FSP).
 		$ref  = new \ReflectionObject( $client );
 		$prop = $ref->getProperty( 'keys' );
+		if ( \PHP_VERSION_ID < 80100 ) {
+			$prop->setAccessible( true );
+		}
 		$keys = $prop->getValue( $client );
 		$this->assertInstanceOf( ApiKeys::class, $keys );
 
@@ -58,6 +61,9 @@ final class ApiFactoryTest extends TestCase {
 
 		$ref  = new \ReflectionObject( $client );
 		$prop = $ref->getProperty( 'keys' );
+		if ( \PHP_VERSION_ID < 80100 ) {
+			$prop->setAccessible( true );
+		}
 
 		$this->assertSame( $keys, $prop->getValue( $client ) );
 	}
