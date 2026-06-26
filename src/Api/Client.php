@@ -135,6 +135,12 @@ class Client implements ApiClientInterface {
 			return new WP_Error( $response['error']['code'], $response['error']['message'] );
 		}
 
+		// 404 means "no result found" (e.g. no update newer than the requested version).
+		// Treat it as an empty success so callers can cache it and avoid repeated requests.
+		if ( 404 === (int) wp_remote_retrieve_response_code( $response ) ) {
+			return array();
+		}
+
 		$decoded = json_decode( $response['body'] ?? '', true );
 
 		if ( isset( $decoded['error']['code'], $decoded['error']['message'] ) ) {
