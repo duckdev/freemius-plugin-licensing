@@ -4,6 +4,8 @@ A lite, UI-free Freemius SDK for Duck Dev WordPress plugins. The library handles
 update delivery, and addon listing by talking to the Freemius API directly. It deliberately ships no admin screens —
 host plugins build their own UI and call into this library for the underlying logic.
 
+📖 **Full documentation:** [docs.duckdev.com/wp-libraries/freemius-plugin-licensing](https://docs.duckdev.com/wp-libraries/freemius-plugin-licensing)
+
 ## Requirements
 
 * PHP 7.4 or higher
